@@ -127,24 +127,18 @@ def check_area(B, mappa, x, y, t, lungY, lungX):
     x1, y1 = x, y+t
     for num in range(B):
         while True:
-            #print(y1, x1, y, t)
             if mappa[y1][x1] == 0:
                 if x1-x == B-1:
                     return True
                 else:
                     x1 += 1
             else:
-                #print("l'astronave è sui palazzi nel pixel {} {}".format(y1,x1))
                 return False
   
 def check_sportelloni(B, H, D, mappa, x, y, lungY, lungX):
-        #print(lungY, lungX)
     if D == 0: return True # non ha sportelli, se è riuscito ad atterrare è ok
     for n in range(x, x+B):
         d = 1 #iteratore lunghezza sportello
-        #print("prima")
-        #print(y,d,D)
-        #print(d, y, x, n)
         while y-d >= 0 and mappa[y-d][n] == 0:
             if d == D:
                 #operazione andata a buon fine (lato disponibile) proseguire con il prossimo lato                   
@@ -152,82 +146,49 @@ def check_sportelloni(B, H, D, mappa, x, y, lungY, lungX):
             else:
                 d += 1
         if y-d < 0:
-            #if B==5: print("helooo")
             return False #lo sportello andrebbe fuori mappa
         if mappa[y-d][n] != 0:
-            #if B == 5: print("eccomi") 
             return False #lo sportello andrebbe su un palazzo
-        
-    #if B == 5 and H == 5 and D == 4:
-        #print("helooo")
     y1 = y+H-1
     for n in range(x, x+B):
         d = 1 #iteratore lunghezza sportello
-        #print("prima")
-        #print(y,d,D)
-        #print(D, y, d, n)
         while y1+d < lungY and mappa[y1+d][n] == 0:
-            #print(D, y, d, n)
-            #print("sono qua")
             if d == D:
                 #operazione andata a buon fine (lato disponibile) proseguire con il prossimo lato                   
                 break
             else:
                 d += 1
         if y1+d >= lungY:
-            #print("eccomi")
-            #print(D, y, d, n)
             return False #lo sportello andrebbe fuori mappa
         if mappa[y1+d][n] != 0:
-            #print("helooo")
-            #print(D, y, d, n)
             return False #lo sportello andrebbe su un palazzo
     
     for n in range(y, y+H):
         d = 1 #iteratore lunghezza sportello
-        #print("prima")
-        #print(d, y, x, n)
         while x-d >= 0 and mappa[n][x-d] == 0:
             if d == D:
-                #print(d, y, x, n)
-                #print("sono qua")
                 #operazione andata a buon fine (lato disponibile) proseguire con il prossimo lato                   
                 break
             else:
                 d += 1
         if x-d < 0:
-            #print("eccomi")
             return False #lo sportello andrebbe fuori mappa
         if mappa[n][x-d] != 0:
-            #print("helooo")
             return False #lo sportello andrebbe su un palazzo    
-    #print("heloo {}".format(D))
     
     x1 = x+B-1
     for n in range(y, y+H):
         d = 1 #iteratore lunghezza sportello
-        #print("prima")
-        #print(y,d,D)
-        #print(d, y, x, n)
         while x1+d < lungY and mappa[n][x1+d] == 0:
-            #print(d, y, x, n)
-            #print("sono qua")
             if d == D:
                 #operazione andata a buon fine (lato disponibile) proseguire con il prossimo lato                   
                 break
             else:
                 d += 1
         if x1+d >= lungY:
-            #print("eccomi")
-            #print(d, y, x, n)
             return False #lo sportello andrebbe fuori mappa
         if mappa[n][x1+d] != 0:
-            #print("helooo")
-            #print(x1+d, n)
-            #print(d, y, x, n)
             return False #lo sportello andrebbe su un palazzo
-    #if B == 2 and H == 2 and D == 5:
-        #print(x,y)
     return True
 
 def ex(file_png, file_txt, file_out):
@@ -237,7 +198,6 @@ def ex(file_png, file_txt, file_out):
     mappa = []
     lungY = len(citta)
     lungX = len(citta[0])
-    #print("--------------------------------")
     # definire altezza e larghezza  
     for y in range(lungY):
         mappa.append([])
@@ -262,7 +222,6 @@ def ex(file_png, file_txt, file_out):
                 i = y+1
                 f = True
                 while f and i < lungY:
-                    #print(citta[i][x], x, y)
                     if color != citta[i][x]:
                         f=False
                         h=i-y
@@ -270,13 +229,8 @@ def ex(file_png, file_txt, file_out):
                         i += 1        
                 if lungY == i:
                         h=i-y
-                #print(w,h)
                 rect.append([x, y, w, h, citta[y][x][0], citta[y][x][1], citta[y][x][2]])
-    #for i in range(lungY):
-        #print(mappa[i])
-    #print("--------------------------------")
     rect.sort(key=lambda x: (-x[1], x[0]))
-    #print(lungY,lungY,lungX,lungX)
     # salvare in un file di testo un rettangolo per riga
     with open(file_out, "w") as file:
         for arg in rect:
@@ -287,29 +241,22 @@ def ex(file_png, file_txt, file_out):
     #ottengo la stringa contenente i dettagli delle astronavi
     with open(file_txt, "r") as file:
         stringa = file.read()
-    #print(stringa)
-    #print("--------------------------------")
     #formatto la stringa in modo da togliere \t, \n e spazi e li trasformo tutti in singole ","
     stringa = stringa.replace("\n", ",")
     stringa = stringa.replace(" ", ",")
     stringa = stringa.replace("\t", ",")
     while ",," in stringa:
         stringa = stringa.replace(",,", ",")
-    #print("--------------------------------")
-    #print(stringa)
     #trasformo la riga formattata in lista di sottoliste di interi in modo che ogni sottolista rappresenta un astronava e ognuno dei 3 valori rispettivamente la B, H e D
     string_list = stringa.split(',')
     if string_list[0] == '':
         string_list = string_list[1:]
     astronavi = [[int(num) for num in string_list[i:i+3]] for i in range(0, len(string_list), 3)]
-    #print(astronavi)
    #defisco per ogni astronave se puo atterrare
     lista = [False]* len(astronavi)
     #print(lista)
     for i in range(len(astronavi)):
         B, H, D = astronavi[i][0], astronavi[i][1], astronavi[i][2]
-        #print(B, H, D)
-        
         for y in range(D, lungY):
             f=True
             y1 = y
@@ -318,16 +265,13 @@ def ex(file_png, file_txt, file_out):
                 flag2 = False
                 while True:
                   if x1 < lungX and y1 < lungY:
-                    #print(x1)
                     if mappa[y1][x1] == 0:
                         if x1-x == B-1:
-                            #print("l'astronave {} potrebbe entrare nell area che inizia con {} {}".format(i+1,y,x))
                             flag2 = True
                             for t in range(H):
                                 if y+t >= lungY: 
                                     flag2 = False
                                     break
-                                #if D <= y
                                 res = check_area(B, mappa, x, y, t, lungY, lungX)
                                 
                                 if res == False:
@@ -343,11 +287,8 @@ def ex(file_png, file_txt, file_out):
                         else:
                             x1 += 1
                     else:
-                        #print("l'astronave {} è sui palazzi nell area che inizia con {} {}".format(i+1,y,x))
                         break
                   else:
-                      #print(x1,x)
-                      #print("l'astronave {} finisce furi nell area che inizia con {} {}".format(i+1,y,x))
                       break
                 #esco dal ciclo for x
                 if flag2 == True:
@@ -356,11 +297,7 @@ def ex(file_png, file_txt, file_out):
             #esco dal for y
             if lista[i] == True:
                 break
-        
-    #print(lista)
-    
     # restituire una lista di N valori booleani, True se l'astronave può atterrare
-    
     return(lista)
 
 if __name__ == "__main__":
